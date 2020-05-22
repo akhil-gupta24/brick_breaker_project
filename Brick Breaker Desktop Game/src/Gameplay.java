@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -31,16 +33,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 	int totalbricksbreak; // keeps original no. of bricks
 	int originaldelay;// keeps original no. of delay
 
+	JFrame object; // Reference created to store the game frame object (frame in which game
+					// actually played)
 	Map1 map; // reference of MapGenerator class
 
-	public void value(int dynamicbrick, int dynamicdelay, int row, int col) {
+	public void value(int dynamicbrick, int dynamicdelay, int row, int col, JFrame obj) {
 		totalbricks = dynamicbrick;
 		totalbricksbreak = dynamicbrick;
-		originaldelay = dynamicdelay;
+		originaldelay = dynamicdelay; // these all are coming from main1 class
 		delay = dynamicdelay;
 		this.row = row;
 		this.col = col;
+		object = obj; // game played i.e 2nd frame object stored coming from main1 class
 		// speed set up according to the level user selected
+
 		map = new Map1(row, col);
 		timer = new Timer(delay, this); // setting timer objects by delay;
 		timer.start(); // Starts the Timer,causing it to start sending action events to its listeners.
@@ -89,6 +95,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			g.setFont(new Font("arial", Font.ITALIC, 20));
 			g.drawString("\"Press Enter to Restart\"", 250, 380); // if want to continue then press enter for this press
 																	// Enter key event must be listen in keypressed
+			g.drawString("\"Press Space to return to Main Menu\"", 200, 420); // string for space enter
 			timer.stop(); // stop the timer
 		}
 
@@ -109,6 +116,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 			g.drawString("\"Press Enter to Restart\"", 250, 380); // if want to continue then press enter for this press
 																	// Enter key event must be listen in keypressed//
 																	// method of KeyListener interface
+			g.drawString("\"Press Space to return to Main Menu\"", 200, 420); // string for space enter
 			timer.stop(); // stop the timer
 		}
 
@@ -257,7 +265,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 				balldirY = -2;
 				playerX = 310; // all things we initialized earlier are initialized again here
 				score = 0;
-				value(totalbricksbreak, originaldelay, row, col);
+				value(totalbricksbreak, originaldelay, row, col, object);
 				repaint();
 				// map object again created as because matrix again will be
 				// created
@@ -265,6 +273,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 				// as it is in new game so create matrix again so that bricks created again from
 				// scratch and
 				// components are again will be painted by calling repaint method
+			}
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) { // when space is clicked when game is over then it will return user
+			// to main menu for level selection
+			if (play == false) { // first it check if game is over or not otherwise in game if we press enter the
+									// it will behave game abnormally
+
+				@SuppressWarnings("unused")
+				FirstFrame firstframeobj = new FirstFrame(); // when space pressed means we want to go back to main menu
+																// then firstframe is being called
+				object.dispose(); // and current frame in which game actually is being played is dispose and
+									// disappear
+
 			}
 		}
 
